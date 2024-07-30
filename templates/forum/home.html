@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - CodeConnect</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to CodeConnect</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <!-- Add other navigation links if needed -->
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Questions</h2>
+        <ul>
+            {% for question in questions %}
+                <li>
+                    <strong>{{ question.user.username }}:</strong> {{ question.content }}
+                    <form method="post" action="{% url 'post_answer' question.id %}">
+                        {% csrf_token %}
+                        <textarea name="answer" placeholder="Write your answer here..."></textarea>
+                        <button type="submit">Submit Answer</button>
+                    </form>
+                    <ul>
+                        {% for answer in question.answers.all %}
+                            <li><strong>{{ answer.user.username }}:</strong> {{ answer.content }}</li>
+                        {% empty %}
+                            <li>No answers yet.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% empty %}
+                <li>No questions available.</li>
+            {% endfor %}
+        </ul>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 CodeConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
